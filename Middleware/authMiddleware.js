@@ -18,12 +18,12 @@ function authenticateToken(req, res, next) {
 }
 
 
-function isAdmin(req, res, next) {
-    if (req.user && req.user.role === 'admin') {
-        next();
-    } else {
-        return res.status(403).send("Unauthorized");
-    }
-}
+// function isAdmin(req, res, next) {
+//     if (req.user && req.user.role === 'admin') {
+//         next();
+//     } else {
+//         return res.status(403).send("Unauthorized");
+//     }
+// }
 
-module.exports = { authenticateToken, isAdmin };
+module.exports = { authenticateToken };

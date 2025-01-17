@@ -1,0 +1,62 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+public/
+
+# Static files
+*.lock
+.DS_Store
+*.pem
+uploads/
+
+# Temporary files and folders
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+Thumbs.db
+.DS_Store
+
+# React-specific
+build/
+.sass-cache/
+
+# TypeScript specific
+*.tsbuildinfo
+
+# MongoDB dumps
+dump/
+*.json
+
+# Coverage reports
+coverage/
+lcov-report/
+
+# Tests
+jest-test-results.json
+.vitest-output/

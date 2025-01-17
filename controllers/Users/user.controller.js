@@ -1,7 +1,12 @@
-const User = require('../../models/Users/User.model');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-
+const bcrypt = require('bcryptjs');
+const db = require('../../models/index');
+const { restart } = require('nodemon');
+const User = db.users;
+const Category = db.category
+const Restaurant = db.restaurant;
+const Menu = db.menu;
+const Order = db.order;
 exports.createUser = async (req, res) => {
   const { name, email, contact, password } = req.body;
   try {
@@ -48,17 +53,20 @@ exports.login = async (req, res) => {
 
     // Compare the provided password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log('isPasswordValid',isPasswordValid);
+    console.log('isPasswordValid', isPasswordValid);
 
     if (!isPasswordValid) {
-        return res.status(401).send({ message: "Invalid password." });
+      return res.status(401).send({ message: "Invalid password." });
     }
 
     // const token = generateToken(businessOwner); // You need to implement generateToken function
     const token = jwt.sign({ userId: user._id }, 'Nbyws45/^/.4', { expiresIn: '10000h' });
 
-    res.send({ token, userDetail: user }); // Sending token back to the client
+
+    res.send({ token, user }); // Sending token back to the client
   } catch (error) {
+    console.error(error);
+
     res.status(500).send({ message: error.message || "Some error occurred while logging in." });
   }
 
@@ -87,4 +95,63 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
+}
+
+exports.getRestaurant = async (req, res) => {
+  const id = req.params.id;
+  try {
+
+    const category = await Category.find({ 'restaurant': id });
+
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+      return res.status(401).send("restaurant not found !");
+    }
+
+    res.status(200).send({ category: category, restaurant: restaurant });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+
+}
+
+exports.getMenu = async (req, res) => {
+  const id = req.params.id;
+  try {
+
+    const menu = await Menu.find({ 'category': id });
+
+    if (!menu) {
+      return res.status(401).send("menu not found !");
+    }
+
+    res.status(200).send({ menu: menu });
+
+  } catch (error) {
+
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+
+  }
+}
+
+
+exports.getCartItems = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const menuItems = await Menu.findById(id);
+
+    res.status(200).send({ menuItems });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+
+
+
+
+
 }
